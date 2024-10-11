@@ -4,36 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/styles.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #2c3e50;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+a {
+    text-decoration: none;
+    color: #3498db;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.back-btn:hover {
+    background-color: #2980b9;
+}
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Code</th>
-                <th>Letter Preview</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% letters.forEach(letter => { %>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <table>
+            <thead>
                 <tr>
-                    <td><%= letter.code %></td>
-                    <td><%= letter.userLetter.substring(0, 50) %>...</td>
-                    <td><%= letter.replied ? 'Replied' : 'Not Replied' %></td>
-                    <td>
-                        <% if (!letter.replied) { %>
-                            <a href="/admin/reply/<%= letter.code %>">Reply</a>
-                        <% } else { %>
-                            <a href="/admin/reply/<%= letter.code %>">View Reply</a>
-                        <% } %>
-                    </td>
+                    <th>Code</th>
+                    <th>Letter Preview</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-            <% }); %>
-        </tbody>
-    </table>
-    <a href="/">Back to Home</a>
+            </thead>
+            <tbody>
+                <% letters.forEach(letter => { %>
+                    <tr>
+                        <td><%= letter.code %></td>
+                        <td><%= letter.userLetter.substring(0, 50) %>...</td>
+                        <td><%= letter.replied ? 'Replied' : 'Not Replied' %></td>
+                        <td>
+                            <% if (!letter.replied) { %>
+                                <a href="/admin/reply/<%= letter.code %>">Reply</a>
+                            <% } else { %>
+                                <a href="/admin/reply/<%= letter.code %>">View Reply</a>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <a href="/" class="back-btn">Back to Home</a>
+    </div>
 </body>
 </html>

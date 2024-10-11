@@ -4,7 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Letter</title>
-    <link rel="stylesheet" href="/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 600px; /* Limit width for better usability */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9; /* Darker shade on hover */
+        }
+
+        p.error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #autosaveStatus {
+            margin-top: 10px;
+            color: green;
+        }
+
+        a {
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        .g-recaptcha {
+            margin: 20px 0; /* Space above and below the reCAPTCHA */
+        }
+    </style>
 </head>
 <body>
     <h1>Submit Your Letter</h1>
@@ -12,7 +84,7 @@
         <p class="error"><%= error %></p>
     <% } %>
     <form id="letterForm" action="/submit" method="POST" onsubmit="return validateCaptcha()">
-        <textarea name="letter" id="letterContent" rows="10" cols="50" required></textarea>
+        <textarea name="letter" id="letterContent" rows="30" required placeholder="Write your letter here..."></textarea>
         <br>
         <div class="g-recaptcha" data-sitekey="6LdZwFwqAAAAAFl8VXVGEB5iRUbJA25whRmLSO-P"></div>
         <br>
@@ -22,11 +94,8 @@
     <a href="/view">View a Letter</a>
     <a href="/admin/login">Admin Login</a>
 
- 
-
-
     <script>
-         function validateCaptcha() {
+        function validateCaptcha() {
             const captchaResponse = grecaptcha.getResponse(); // Get the response from Google reCAPTCHA
 
             if (captchaResponse.length === 0) {
@@ -71,6 +140,5 @@
         });
     </script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 </body>
 </html>
