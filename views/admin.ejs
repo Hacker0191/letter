@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Letter Preview</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% letters.forEach(letter => { %>
+                <tr>
+                    <td><%= letter.code %></td>
+                    <td><%= letter.userLetter.substring(0, 50) %>...</td>
+                    <td><%= letter.replied ? 'Replied' : 'Not Replied' %></td>
+                    <td>
+                        <% if (!letter.replied) { %>
+                            <a href="/admin/reply/<%= letter.code %>">Reply</a>
+                        <% } else { %>
+                            <a href="/admin/reply/<%= letter.code %>">View Reply</a>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <a href="/">Back to Home</a>
+</body>
+</html>

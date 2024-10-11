@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Letter</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Submit Your Letter</h1>
+    <% if (locals.error) { %>
+        <p class="error"><%= error %></p>
+    <% } %>
+    <form id="letterForm" action="/submit" method="POST" onsubmit="return validateCaptcha()">
+        <textarea name="letter" id="letterContent" rows="10" cols="50" required></textarea>
+        <br>
+        <div class="g-recaptcha" data-sitekey="6LdZwFwqAAAAAFl8VXVGEB5iRUbJA25whRmLSO-P"></div>
+        <br>
+        <button type="submit">Submit Letter</button>
+    </form>
+    <p id="autosaveStatus"></p>
+    <a href="/view">View a Letter</a>
+    <a href="/admin/login">Admin Login</a>
+
+ 
+
+
+    <script>
+         function validateCaptcha() {
+            const captchaResponse = grecaptcha.getResponse(); // Get the response from Google reCAPTCHA
+
+            if (captchaResponse.length === 0) {
+                alert('Please complete the reCAPTCHA to submit the form.'); // Show an alert if captcha is not completed
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission if reCAPTCHA is completed
+        }
+        
+        let draftCode = null;
+        const letterContent = document.getElementById('letterContent');
+        const autosaveStatus = document.getElementById('autosaveStatus');
+
+        function autosave() {
+            const content = letterContent.value;
+            if (content.trim() !== '') {
+                fetch('/autosave', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ letter: content, code: draftCode }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        draftCode = data.code;
+                        autosaveStatus.textContent = 'Draft saved at ' + new Date().toLocaleTimeString();
+                    }
+                })
+                .catch(error => {
+                    console.error('Autosave failed:', error);
+                    autosaveStatus.textContent = 'Autosave failed';
+                });
+            }
+        }
+
+        letterContent.addEventListener('input', () => {
+            clearTimeout(letterContent.timeout);
+            letterContent.timeout = setTimeout(autosave, 2000);
+        });
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Letter</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    
+    <% if (letterData && letterData.userLetter) { %>
+        <h2>Your Letter:</h2>
+        <div class="letter-content user-letter">
+            <p><strong>Date:</strong> <%= new Date(letterData.userDate).toLocaleString() %></p>
+            <p><%= letterData.userLetter %></p>
+        </div>
+        <% if (letterData.replied) { %>
+            <h2>Admin Reply:</h2>
+            <div class="letter-content admin-reply">
+                <p><strong>Date:</strong> <%= new Date(letterData.adminDate).toLocaleString() %></p>
+                <p><%= letterData.adminReply %></p>
+            </div>
+        <% } else { %>
+            <p>The admin has not replied yet. Please check back later.</p>
+        <% } %>
+    <% } else { %>
+        <p>Error: Letter not found or invalid data.</p>
+    <% } %>
+    
+    <a href="/">Submit a New Letter</a>
+    <a href="/view">View Another Letter</a>
+</body>
+</html>

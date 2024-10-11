@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Reply</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Admin Reply</h1>
+    <h2>User's Letter:</h2>
+    <div class="letter-content">
+        <%= letterData.userLetter %>
+    </div>
+    <% if (letterData.replied) { %>
+        <h2>Your Previous Reply:</h2>
+        <div class="letter-content">
+            <%= letterData.adminReply %>
+        </div>
+    <% } %>
+    <h2><%= letterData.replied ? 'Update Reply:' : 'Reply:' %></h2>
+    <form action="/admin/reply/<%= code %>" method="POST">
+        <textarea name="reply" rows="10" cols="50" required><%= letterData.adminReply || '' %></textarea>
+        <br>
+        <button type="submit"><%= letterData.replied ? 'Update Reply' : 'Send Reply' %></button>
+    </form>
+    <a href="/admin">Back to Admin Dashboard</a>
+
+    <script>
+        let draftCode = null;
+        const letterContent = document.getElementById('letterContent');
+        const autosaveStatus = document.getElementById('autosaveStatus');
+
+        function autosave() {
+            const content = letterContent.value;
+            if (content.trim() !== '') {
+                fetch('/autosave', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ letter: content, code: draftCode }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        draftCode = data.code;
+                        autosaveStatus.textContent = 'Draft saved at ' + new Date().toLocaleTimeString();
+                    }
+                })
+                .catch(error => {
+                    console.error('Autosave failed:', error);
+                    autosaveStatus.textContent = 'Autosave failed';
+                });
+            }
+        }
+
+        letterContent.addEventListener('input', () => {
+            clearTimeout(letterContent.timeout);
+            letterContent.timeout = setTimeout(autosave, 2000);
+        });
+    </script>
+</body>
+</html>
